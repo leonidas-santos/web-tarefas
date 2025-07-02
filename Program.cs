@@ -18,7 +18,7 @@ namespace web_tarefas
             builder.Services.AddDbContext<TarefaContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
          
-            builder.Services.AddTransient<TarefaService, TarefaService>();
+            builder.Services.AddTransient<ITarefaService, TarefaService>();
 
             builder.Services.AddScoped<ITarefaRepository, TarefaRepositoryEF>();
 

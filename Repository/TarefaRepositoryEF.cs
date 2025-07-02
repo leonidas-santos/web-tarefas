@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-using web_tarefas.Models;
+﻿using web_tarefas.Models;
 
 namespace web_tarefas.Repository
 {
@@ -21,6 +19,11 @@ namespace web_tarefas.Repository
         public Tarefa BuscarPorID(int id)
         {
             return _tarefaContext.Tarefas.FirstOrDefault(x => x.Id == id);
+        }
+
+        public List<Tarefa> BuscarTodos()
+        {
+            return _tarefaContext.Tarefas.ToList();
         }
 
         public int Criar(Tarefa tarefa)

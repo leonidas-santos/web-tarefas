@@ -1,12 +1,11 @@
-﻿using web_tarefas.Models;
-
-namespace web_tarefas.Repository
+﻿namespace web_tarefas.Repository
 {
-    public interface ICRUD
+    public interface ICRUD<T>
     {
-        public int Criar(Tarefa tarefa);
-        public void Atualizar(Tarefa tarefa);
+        public int Criar(T entidade);
+        public void Atualizar(T entidade);
         public void Excluir(int id);
-        public Tarefa BuscarPorID(int id);
+        public T BuscarPorID(int id);
+        public List<T> BuscarTodos();
     }
 }

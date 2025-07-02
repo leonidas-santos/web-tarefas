@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using web_tarefas.Models;
 
 namespace web_tarefas.Repository
 {
     public class TarefaContext : DbContext
     {
-        public TarefaContext(DbContextOptions<TarefaContext> options) : base(options)
-        {
-        }
+        public TarefaContext(DbContextOptions<TarefaContext> options)
+            : base(options) { }
 
         public DbSet<Tarefa> Tarefas { get; set; }
 

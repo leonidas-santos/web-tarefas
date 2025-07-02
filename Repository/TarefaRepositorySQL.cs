@@ -1,4 +1,5 @@
-﻿using web_tarefas.Models;
+﻿
+using web_tarefas.Models;
 
 namespace web_tarefas.Repository
 {
@@ -10,6 +11,11 @@ namespace web_tarefas.Repository
         }
 
         public Tarefa BuscarPorID(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Tarefa> BuscarTodos()
         {
             throw new NotImplementedException();
         }

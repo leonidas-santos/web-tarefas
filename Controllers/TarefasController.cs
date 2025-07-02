@@ -13,12 +13,12 @@ namespace web_tarefas.Controllers
     public class TarefasController : Controller
     {
         private readonly TarefaContext _context;
-        private readonly TarefaService _tarefaService;
+        private readonly ITarefaService _tarefaService;
 
-        public TarefasController(TarefaContext context, TarefaService tarefa)
+        public TarefasController(TarefaContext context, ITarefaService tarefaService)
         {
             _context = context;
-            _tarefaService = tarefa;
+            _tarefaService = tarefaService;
         }
 
         public async Task<IActionResult> Index()
