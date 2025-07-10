@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 using web_tarefas.Repository;
@@ -13,14 +14,21 @@ namespace web_tarefas
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                                                           .AddCookie(options =>
+                                                           {
+                                                               options.LoginPath = "/Account/Login";
+                                                               options.LogoutPath = "/Account/Logout";
+                                                           });
 
             // Configurar Entity Framework
             builder.Services.AddDbContext<TarefaContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-         
-            builder.Services.AddTransient<ITarefaService, TarefaService>();
 
-            builder.Services.AddScoped<ITarefaRepository, TarefaRepositoryEF>();
+            builder.Services.AddScoped<ITarefaRepository, TarefaRepository>();
+
+            builder.Services.AddScoped<ITarefaService, TarefaService>();
+
 
             var app = builder.Build();
 
@@ -36,6 +44,7 @@ namespace web_tarefas
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

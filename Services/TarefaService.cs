@@ -5,40 +5,22 @@ namespace web_tarefas.Services
 {
     public class TarefaService : ITarefaService
     {
-        private readonly ITarefaRepository _repository;
-        public TarefaService(ITarefaRepository tarefaContext)
-        {
-            _repository = tarefaContext;
-        }
+        private readonly ITarefaRepository _tarefaRepository;
 
-        public void Atualizar(Tarefa tarefa)
-        {
-            _repository.Atualizar(tarefa);
-        }
+        public TarefaService(ITarefaRepository tarefaRepository) =>
+            _tarefaRepository = tarefaRepository;
 
-        public Tarefa BuscarPorId(int id)
-        {
-            return _repository.FindByID(id);
-        }
+        public void Atualizar(Tarefa entidade) => _tarefaRepository.Atualizar(entidade);
 
-        public List<Tarefa> BuscarTodos()
-        {
-            return _repository.BuscarTodos();
-        }
+        public Tarefa BuscarPorId(int id) => _tarefaRepository.BuscarPorId(id);
 
-        public int Criar(Tarefa tarefa)
-        {
-            return _repository.Criar(tarefa);
-        }
+        public List<Tarefa> BuscarTodos() => _tarefaRepository.BuscarTodos();
 
-        public void Excluir(int id)
-        {
-            _repository.Excluir(id);
-        }
+        public int Criar(Tarefa entidade) => _tarefaRepository.Criar(entidade);
 
-        public bool ValidarEntidade(Tarefa tarefa)
-        {
-            return true;
-        }
+        public void Deletar(int id) => _tarefaRepository.Deletar(id);
+
+        public async Task<List<Tarefa>> BuscarOrdenadoDataCriacaoDesc() =>
+            await _tarefaRepository.BuscarOrdenadoDataCriacaoDesc();
     }
 }

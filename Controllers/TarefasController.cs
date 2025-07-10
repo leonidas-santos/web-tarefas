@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using web_tarefas.Enums;
+using web_tarefas.Filters;
 using web_tarefas.Models;
 
 using web_tarefas.Repository;
@@ -10,22 +11,23 @@ using web_tarefas.ViewModels;
 
 namespace web_tarefas.Controllers
 {
+    [RequireAuthentication]
     public class TarefasController : Controller
     {
-        private readonly TarefaContext _context;
         private readonly ITarefaService _tarefaService;
+        private readonly TarefaContext _context;
 
-        public TarefasController(TarefaContext context, ITarefaService tarefaService)
+        public TarefasController(ITarefaService tarefaService, TarefaContext tarefaContext)
         {
-            _context = context;
             _tarefaService = tarefaService;
+            _context = tarefaContext;
         }
 
+
         public async Task<IActionResult> Index()
+        
         {
-            var tarefas = await _context.Tarefas
-                .OrderByDescending(t => t.DataCriacao)
-                .ToListAsync();
+            List<Tarefa> tarefas = await _tarefaService.BuscarOrdenadoDataCriacaoDesc();
 
             // Converte para ViewModel
             var tarefasViewModel = tarefas.Select(t => TarefaViewModel.FromTarefa(t)).ToList();
@@ -33,6 +35,8 @@ namespace web_tarefas.Controllers
             return View(tarefasViewModel);
         }
 
+        [IsAdmAttribute]
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -54,6 +58,7 @@ namespace web_tarefas.Controllers
             return View(tarefaViewModel);
         }
 
+        [RequireAuthentication]
         public IActionResult Create()
         {
             var viewModel = new TarefaViewModel
@@ -69,12 +74,7 @@ namespace web_tarefas.Controllers
         public async Task<IActionResult> Create(TarefaViewModel viewModel)
         {
             // Remove validações das propriedades complementares
-            ModelState.Remove(nameof(TarefaViewModel.PrioridadeTexto));
-            ModelState.Remove(nameof(TarefaViewModel.PrioridadeCor));
-            ModelState.Remove(nameof(TarefaViewModel.StatusTexto));
-            ModelState.Remove(nameof(TarefaViewModel.StatusCor));
-            ModelState.Remove(nameof(TarefaViewModel.TemDescricao));
-            ModelState.Remove(nameof(TarefaViewModel.DataCriacao));
+            ExtrairPropriedadesInuteis();
 
             if (ModelState.IsValid)
             {
@@ -87,6 +87,16 @@ namespace web_tarefas.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(viewModel);
+        }
+
+        private void ExtrairPropriedadesInuteis()
+        {
+            ModelState.Remove(nameof(TarefaViewModel.PrioridadeTexto));
+            ModelState.Remove(nameof(TarefaViewModel.PrioridadeCor));
+            ModelState.Remove(nameof(TarefaViewModel.StatusTexto));
+            ModelState.Remove(nameof(TarefaViewModel.StatusCor));
+            ModelState.Remove(nameof(TarefaViewModel.TemDescricao));
+            ModelState.Remove(nameof(TarefaViewModel.DataCriacao));
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -117,12 +127,7 @@ namespace web_tarefas.Controllers
             }
 
             // Remove validações das propriedades complementares
-            ModelState.Remove(nameof(TarefaViewModel.PrioridadeTexto));
-            ModelState.Remove(nameof(TarefaViewModel.PrioridadeCor));
-            ModelState.Remove(nameof(TarefaViewModel.StatusTexto));
-            ModelState.Remove(nameof(TarefaViewModel.StatusCor));
-            ModelState.Remove(nameof(TarefaViewModel.TemDescricao));
-            ModelState.Remove(nameof(TarefaViewModel.DataCriacao));
+            ExtrairPropriedadesInuteis();
 
             if (ModelState.IsValid)
             {

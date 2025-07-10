@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using web_tarefas.Enums;
+using web_tarefas.Services;
 using web_tarefas.ViewModels;
 
 namespace web_tarefas.Models
